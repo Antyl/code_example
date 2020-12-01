@@ -15,59 +15,6 @@ import java.lang.Exception
 
 class ImplTypesRepository: TypesRepository{
 
-    private var allTypes: MutableList<Type> = ArrayList()
-
-    override fun fetchTypes(): Single<MutableList<Type>> {
-        return Single.create { observer ->
-            if (allTypes.isEmpty()) {
-                val address = RoomDatabaseUtils.getAddress()
-                NetworkService()
-                    .getInstance()
-                    .getServerAPI()
-                    .getTypes(address.idShop)
-                    .enqueue(object : Callback<MutableList<Type>> {
-                        override fun onFailure(call: Call<MutableList<Type>>, t: Throwable) {
-                            observer.onError(t)
-                        }
-
-                        override fun onResponse(
-                            call: Call<MutableList<Type>>,
-                            response: Response<MutableList<Type>>
-                        ) {
-                            when (response.code()) {
-                                200 -> {
-                                    allTypes = response.body()!!
-                                    observer.onSuccess(allTypes)
-                                }
-                                201 -> observer.onError(Exception("Fail"))
-                                else -> observer.onError(Exception("Fail"))
-                            }
-                        }
-                    })
-            } else {
-                observer.onSuccess(allTypes)
-            }
-        }
-    }
-
-    override fun getTypes(): MutableList<Type>? {
-        return allTypes
-    }
-
-    override fun clearTypes() {
-        allTypes.clear()
-    }
-
-    override fun getSubTypes(type: String): MutableList<SubType> {
-        val subTypes = ArrayList<SubType>()
-        allTypes.forEach {
-            if (it.type == type) {
-                subTypes.addAll(it.subTypes)
-            }
-        }
-        return subTypes
-    }
-
     override fun getProducts(type: String, subType: String): MutableList<Product> {
         val products = ArrayList<Product>()
         allTypes.forEach { typeInside ->
@@ -86,23 +33,5 @@ class ImplTypesRepository: TypesRepository{
                 it.price
         }
         return products
-    }
-
-    override fun getBoxes() {
-        NetworkService()
-            .getInstance()
-            .getServerAPI()
-            .getBoxes()
-            .enqueue(object : Callback<MutableList<CartBoxesEntity>> {
-
-                override fun onFailure(call: Call<MutableList<CartBoxesEntity>>, t: Throwable) {}
-
-                override fun onResponse(
-                    call: Call<MutableList<CartBoxesEntity>>,
-                    response: Response<MutableList<CartBoxesEntity>>
-                ) {
-                    RoomDatabaseUtils.initBoxes(response.body()!!)
-                }
-            })
     }
 }

@@ -10,30 +10,6 @@ class RepositoryModule {
 
     @Singleton
     @Provides
-    fun getDiscountRepository(): DiscountRepository {
-        return ImplDiscountRepository()
-    }
-
-    @Singleton
-    @Provides
-    fun getAddressesRepository(): AddressesRepository {
-        return ImplAddressesRepository()
-    }
-
-    @Singleton
-    @Provides
-    fun getCartRepository(): CartRepository {
-        return ImplCartRepository()
-    }
-
-    @Singleton
-    @Provides
-    fun getProfileRepository(): ProfileRepository {
-        return ImplProfileRepository()
-    }
-
-    @Singleton
-    @Provides
     fun getHistoryRepository(): HistoryRepository {
         return ImplHistoryRepository()
     }

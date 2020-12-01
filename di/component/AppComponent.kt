@@ -12,11 +12,6 @@ import javax.inject.Singleton
 @Component(modules = [AppModule::class, RepositoryModule::class])
 interface AppComponent {
     fun inject(app: App)
-    fun getDiscountRepository(): DiscountRepository
-    fun getAddressesRepository(): AddressesRepository
-    fun getCartRepository(): CartRepository
-    fun getProfileRepository(): ProfileRepository
     fun getTypesRepository(): TypesRepository
     fun getNotificationRepository(): HistoryRepository
-    fun getAppDatabase(): AppDatabase
 }
